@@ -29,7 +29,7 @@ If you don't see any of these things in the treeview, its because you don't have
 
 Then you'll see that information appears in the sectors. You can browse through them at your pleasure.
 
-If you want to change that information, then you're kinda out of luck because I haven't programmed that in yet. I'm not even sure you can see it. But the Treeview does update, so the information is there.
+If you want to change that information, then you're kinda out of luck because I haven't programmed that in yet.
 
 Work continues.
 
