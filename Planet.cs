@@ -16,13 +16,14 @@ namespace GalMapEdit
 		private int angle;                      // angle from host star
 		private int mass;
 
-		public UInt16 type;
+		public int type;
 
 		private Star host;						// star in which this planet is in orbit around
 
 		public List<Moon> moons = new List<Moon>();
+		public List<Asteroid> asteroids = new List<Asteroid>();
 
-		public Planet(string Name, string Desc, int dist, int ang, UInt16 Type, Star Host)
+		public Planet(string Name, string Desc, int dist, int ang, int Type, int Mass, Star Host)
 		{
 			name = Name;
 			desc = Desc;
@@ -30,6 +31,7 @@ namespace GalMapEdit
 			angle = ang;
 			type = Type;
 			host = Host;
+			mass = Mass;
 		}
 
 		public string getName()

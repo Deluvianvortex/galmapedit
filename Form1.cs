@@ -14,15 +14,30 @@ namespace GalMapEdit
 	public partial class Form1 : Form
 	{
 		private const int GRIDSIZE = 5;																								// size of each grid square in pixels
-		private const int GRID_MIN = 0;																								// just zero
+		private const int GRID_MIN = 0;																								// just zero, but maybe someone wants to change that.
 		private const int GRID_MAX = 181;                                                                                           // number of squares in the grid
 
-		private const int SECTORSIZE = 100;
+		private const int SECTORSIZE = 100;																							// number of grid squares INSIDE a sector
 
-		private const int GALAXY_SIZE = 181;                                                                                        // galaxy_size should equal grid_max 
+		private const int GALAXY_SIZE = 181;                                                                                        // galaxy_size should equal grid_max (it doesn't have to, but it should)
 
+		private const int STAR_MINMASS = 50000000;																					// set to 0 if you want but that makes no sense at all
+		private const int STAR_MAXMASS = Int32.MaxValue - STAR_MINMASS;
 
 		private const int PLANET_MAXDIST = 32000;                                                                                   // maximum distance a planet can be from its host star
+		private const int PLANET_MINMASS = 10000;
+		private const int PLANET_MAXMASS = 40000000;
+
+		private const int MOON_MAXDIST = 24000;
+		private const int MOON_MAXMASS = 4200000;
+		private const int MOON_MINMASS = 1200;
+
+		private const int COMET_MAXMASS = 1200;
+		private const int COMET_MINMASS = 600;
+
+		private const int ASTEROID_MAXDIST = 1600;
+		private const int ASTEROID_MINMASS = 120;
+		private const int ASTEROID_MAXMASS = 1200;																					// I totally made up each one of these numbers off the top of my head
 
 		private int xcoord, ycoord;																									// these are the sector coords when the mouse moves
 		private int selectionX, selectionY;                                                                                         // this is the sector coords when you click the mouse
@@ -40,7 +55,7 @@ namespace GalMapEdit
 		private Star newStar;
 		private Planet newPlanet;
 		private Moon newMoon;
-
+		private Asteroid newAsteroid;
 		private Random rnd;
 
 		private List<TreeItem> treeQueue;																							// this caused so much headache to get to work (but it works!)
@@ -54,7 +69,7 @@ namespace GalMapEdit
 			SpoolNewGalaxy();																										// lets get this shit started!
 		}
 
-		private void SetupGUI()
+		private void SetupGUI()																										// no one wants to look at this.
 		{
 			bar = new StatusBar();
 			statusPanel = new StatusBarPanel();
@@ -67,6 +82,7 @@ namespace GalMapEdit
 			angleBox.Hide();
 			list1.Hide();
 			list2.Hide();
+			list3.Hide();
 			descBox.Hide();
 
 			statusPanel.BorderStyle = StatusBarPanelBorderStyle.Sunken;
@@ -110,49 +126,79 @@ namespace GalMapEdit
 		{
 			treeView1.Nodes.Clear();																								// Clear the nodes
 			treeView1.BeginUpdate();																								// Start the update for the tree
-			int i = 4;																												// has to be 4 because 3 nodes exist in the list already
+			int i = 5;																												// has to be 5 because 4 nodes exist in the list initially
 			treeQueue = new List<TreeItem>()
 			{
 				new TreeItem("Sector", 1, 0),																						// sector is the root node
 				new TreeItem("Stars", 2, 1),																						// stars is first child node
-				new TreeItem("Comets", 3, 1)																						// comets is second child node
+				new TreeItem("Comets", 3, 1),																						// comets is second child node
+				new TreeItem("Asteroids", 4, 1)
 			};
-			if (selected.comets.Count > 0)																							// don't do this shit if there's no comets in the sector
+			
+			
+			foreach (Comet c in selected.comets)																				
 			{
-				foreach (Comet c in selected.comets)																				
-				{
-					treeQueue.Add(new TreeItem("Comet", i, 3) { tag = c });                                                         // add a comet to the queue and set its parent to the root comet node
-					i++;																											
-				}
+				treeQueue.Add(new TreeItem("Comet", i, 3) { tag = selected });														// add a comet to the queue and set its parent to the selected sector
+				i++;																											
 			}
-			if (selected.stars.Count > 0)																							// So, there is definitely a way to do this recursively, but the																						
-			{                                                                                                                       // node structure is only, at most, 5 levels deep, so why bother?
-				foreach (Star s in selected.stars)
+			
+			
+			foreach (Asteroid a in selected.asteroids)
+			{
+				treeQueue.Add(new TreeItem("Asteroid", i, 4) { tag = selected });													// same idea as before, but with asteroids
+				i++;
+			}
+
+			
+			foreach (Star s in selected.stars)																						// this one we set the tags to the host stars
+			{
+				int starRoot = i;
+				treeQueue.Add(new TreeItem("Star", i, 2) { tag = s });
+				i++;
+				int planetsRoot = i;
+				treeQueue.Add(new TreeItem("Planets", i, starRoot) { tag = s });
+				i++;
+				foreach (Planet p in s.planets)
 				{
-					treeQueue.Add(new TreeItem("Star", i, 2) { tag = s });
+					int planetRoot = i;
+					treeQueue.Add(new TreeItem("Planet", i, planetsRoot) { tag = p });                                              // make a planet node
 					i++;
-					treeQueue.Add(new TreeItem("Planets", i, i - 1) { tag = s });													// the only real issue with doing it this way is making sure the nodes
-					i++;																											// align with their parents correctly, but the fix is just to run 2 
-					int j = 1;																										// reverse iterators and subtract those numbers. Simple.
-					foreach (Planet p in s.planets)
+					int moonsRoot = i;
+					treeQueue.Add(new TreeItem("Moons", i, planetRoot) { tag = p });												// make a "Moons" subnode 
+					i++;
+					foreach (Moon m in p.moons)
 					{
-						treeQueue.Add(new TreeItem("Planet", i, i - j) { tag = p });
+						int moonRoot = i;
+						treeQueue.Add(new TreeItem("Moon", i, moonsRoot) { tag = m });
 						i++;
-						j++;
-						treeQueue.Add(new TreeItem("Moons", i, i - 1) { tag = p });
+						int moonAsteroidsRoot = i;
+						treeQueue.Add(new TreeItem("Asteroids", i, moonRoot) { tag = m });
 						i++;
-						j++;
-						int k = 1;
-						foreach (Moon m in p.moons)
+						foreach (Asteroid a in m.asteroids)
 						{
-							treeQueue.Add(new TreeItem("Moon", i, i - k) { tag = m });
+							treeQueue.Add(new TreeItem("Asteroid", i, moonAsteroidsRoot) { tag = a });
 							i++;
-							j++;
-							k++;
 						}
 					}
+					int planetAsteroidsRoot = i;
+					treeQueue.Add(new TreeItem("Asteroids", i, planetRoot) { tag = p });
+					i++;
+					foreach (Asteroid ast in p.asteroids)
+					{
+						treeQueue.Add(new TreeItem("Asteroid", i, planetAsteroidsRoot));
+						i++;
+					}
+				}
+				int asteroidsRoot = i;
+				treeQueue.Add(new TreeItem("Asteroids", i, starRoot) { tag = s });                                                  
+				i++;                                                                                                                                                                                                           	
+				foreach (Asteroid a in s.asteroids)                                                                             
+				{
+					treeQueue.Add(new TreeItem("Asteroid", i, asteroidsRoot) { tag = a });												
+					i++;																										
 				}
 			}
+			
 
 			PopulateTreeView(0, null);																								// this took entirely too long to figure out
 			treeView1.EndUpdate();                                                                                                  // End the update cycle
@@ -182,7 +228,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void pictureBox1_Click(object sender, EventArgs e)
+		private void pictureBox1_Click(object sender, EventArgs e)																	// this is what happens when you click the mouse inside the picturebox
 		{
 			selectionX = xcoord;
 			selectionY = ycoord;
@@ -197,15 +243,15 @@ namespace GalMapEdit
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			pictureBox1.BackColor = Color.Black;
-			pictureBox1.Paint += new PaintEventHandler(this.pictureBox1_Paint);
+			pictureBox1.BackColor = Color.Black;																					// I have to set the variables this way because the designer wouldn't
+			pictureBox1.Paint += new PaintEventHandler(this.pictureBox1_Paint);														// let me do it right, but it works.
 			pictureBox1.MouseMove += new MouseEventHandler(this.pictureBox1_MouseMove);
 			pictureBox1.Click += new EventHandler(this.pictureBox1_Click);
 			
 			Controls.Add(pictureBox1);
 		}
 
-		private void pictureBox1_Paint(object sender, PaintEventArgs e)
+		private void pictureBox1_Paint(object sender, PaintEventArgs e)																// this draws the grid (and anything else) in the picturebox
 		{
 			Graphics g = e.Graphics;
 			Pen scribble = new Pen(Color.Gray);
@@ -215,7 +261,7 @@ namespace GalMapEdit
 
 			scribble.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-			for (int i = 0; i < 181; i++)
+			for (int i = GRID_MIN; i < GRID_MAX; i++)
 			{
 				// Vertical
 				g.DrawLine(scribble, i * GRIDSIZE, GRID_MIN, i * GRIDSIZE, GRID_MAX * GRIDSIZE);
@@ -262,108 +308,166 @@ namespace GalMapEdit
 		private void treeView1_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			// loads the doubleclicked object into the editor
-
-			object select = treeView1.SelectedNode.Tag;
-
-			List<string> onelist = new List<string>();
-			List<string> twolist = new List<string>();
-
-			if (select is Sector s)
+			if (treeView1.SelectedNode.Tag != null)
 			{
-				nameBox.Show();
-				nameBox.Text = s.name;
-				typeBox.Hide();
-				massBox.Hide();
-				distBox.Hide();
+				object select = treeView1.SelectedNode.Tag;
 
-				list1.Show();
-				list2.Show();
-			
-				foreach (Star fire in s.stars)
+				List<string> onelist = new List<string>();
+				List<string> twolist = new List<string>();
+				List<string> threelist = new List<string>();
+
+				if (select is Sector s)
 				{
-					onelist.Add(fire.name.ToString());	
+					nameBox.Show();
+					nameBox.Text = s.name;
+					typeBox.Hide();
+					massBox.Hide();
+					distBox.Hide();
+
+					list1.Show();
+					list2.Show();
+					list3.Show();
+
+					onelist.Clear();
+					twolist.Clear();
+					threelist.Clear();
+
+					foreach (Star fire in s.stars)
+					{
+						onelist.Add(fire.name.ToString());
+					}
+					foreach (Comet comet in s.comets)
+					{
+						twolist.Add(comet.name.ToString());
+					}
+					foreach (Asteroid roids in s.asteroids)
+					{
+						threelist.Add(roids.name);
+					}
+
+					list1.DataSource = onelist;
+					list2.DataSource = twolist;
+					list3.DataSource = threelist;
 				}
-				foreach (Comet comet in s.comets)
+				if (select is Star st)
 				{
-					twolist.Add(comet.name.ToString());
+					nameBox.Show();
+					nameBox.Text = st.name;
+					massBox.Show();
+					massBox.Text = st.mass.ToString();
+					typeBox.Show();
+					typeBox.Text = st.type.ToString();
+					distBox.Show();
+					distBox.Text = st.x.ToString();
+					angleBox.Show();
+					angleBox.Text = st.y.ToString();
+					list1.Show();
+					list2.Show();
+					twolist.Clear();
+					onelist.Clear();
+					foreach (Planet pl in st.planets)
+					{
+						onelist.Add(pl.getName());
+					}
+					list1.DataSource = onelist;
+					foreach (Asteroid ast in st.asteroids)
+					{
+						twolist.Add(ast.name);
+					}
+					list2.DataSource = twolist;
+					list3.Hide();
 				}
-
-				list1.DataSource = onelist;
-				list2.DataSource = twolist;
-				
-			}
-			if (select is Star st)
-			{
-				nameBox.Show();
-				nameBox.Text = st.name;
-				massBox.Show();
-				massBox.Text = st.mass.ToString();
-				typeBox.Show();
-				typeBox.Text = st.type.ToString();
-				distBox.Hide();
-				angleBox.Hide();
-				list1.Show();
-				foreach (Planet pl in st.planets)
+				if (select is Comet c)
 				{
-					onelist.Add(pl.getName());
+					nameBox.Show();
+					nameBox.Text = c.name;
+					massBox.Show();
+					massBox.Text = c.mass.ToString();
+					typeBox.Show();
+					typeBox.Text = c.type.ToString();
+					distBox.Hide();
+					angleBox.Hide();
+					descBox.Show();
+					descBox.Text = c.desc;
+					list2.Hide();
+					list1.Hide();
+					list3.Hide();
 				}
-				list1.DataSource = onelist;
-
-
-			}
-			if (select is Comet c)
-			{
-				nameBox.Show();
-				nameBox.Text = c.name;
-				massBox.Show();
-				massBox.Text = c.mass.ToString();
-				typeBox.Show();
-				typeBox.Text = c.type.ToString();
-				distBox.Hide();
-				angleBox.Hide();
-				list1.Hide();
-				list2.Hide();
-			}
-			if (select is Planet p)
-			{
-				nameBox.Show();
-				nameBox.Text = p.getName();
-				massBox.Show();
-				massBox.Text = p.getMass().ToString();
-				typeBox.Show();
-				typeBox.Text = p.type.ToString();
-				distBox.Show();
-				distBox.Text = p.getDistance().ToString();
-				angleBox.Show();
-				angleBox.Text = p.getAngle().ToString();
-
-				list1.Show();
-				foreach (Moon mo in p.moons)
+				if (select is Planet p)
 				{
-					onelist.Add(mo.getName());
-				}
-				list1.DataSource = onelist;
-				list2.Hide();
-			}
-			if (select is Moon m)
-			{
-				nameBox.Show();
-				nameBox.Text = m.getName();
-				massBox.Show();
-				massBox.Text = m.getMass().ToString();
-				typeBox.Show();
-				typeBox.Text = m.type.ToString();
-				distBox.Show();
-				distBox.Text = m.getDistance().ToString();
-				angleBox.Show();
-				angleBox.Text = m.getAngle().ToString();
-				list1.Hide();
-				list2.Hide();
-			}
+					nameBox.Show();
+					nameBox.Text = p.getName();
+					massBox.Show();
+					massBox.Text = p.getMass().ToString();
+					typeBox.Show();
+					typeBox.Text = p.type.ToString();
+					distBox.Show();
+					distBox.Text = p.getDistance().ToString();
+					angleBox.Show();
+					angleBox.Text = p.getAngle().ToString();
+					descBox.Show();
+					descBox.Text = p.getDescription();
+					onelist.Clear();
+					twolist.Clear();
 
-			
-			
-			
+					list1.Show();
+					foreach (Moon mo in p.moons)
+					{
+						onelist.Add(mo.getName());
+					}
+					list1.DataSource = onelist;
+					list2.Show();
+					foreach (Asteroid ast in p.asteroids)
+					{
+						twolist.Add(ast.name);
+					}
+					list2.DataSource = twolist;
+					list3.Hide();
+				}
+				if (select is Moon m)
+				{
+					nameBox.Show();
+					nameBox.Text = m.getName();
+					massBox.Show();
+					massBox.Text = m.getMass().ToString();
+					typeBox.Show();
+					typeBox.Text = m.type.ToString();
+					distBox.Show();
+					distBox.Text = m.getDistance().ToString();
+					angleBox.Show();
+					angleBox.Text = m.getAngle().ToString();
+					descBox.Show();
+					descBox.Text = m.getDescription();
+					onelist.Clear();
+					list1.Show();
+					foreach (Asteroid ast in m.asteroids)
+					{
+						onelist.Add(ast.name);
+					}
+					list1.DataSource = onelist;
+
+					list2.Hide();
+					list3.Hide();
+				}
+				if (select is Asteroid a)
+				{
+					nameBox.Show();
+					nameBox.Text = a.name;
+					massBox.Show();
+					massBox.Text = a.mass.ToString();
+					typeBox.Show();
+					typeBox.Text = a.type.ToString();
+					descBox.Show();
+					descBox.Text = a.desc;
+					distBox.Show();
+					distBox.Text = a.x.ToString();                                                                                      // distance and angle are x/y in free asteroids
+					angleBox.Show();
+					angleBox.Text = a.y.ToString();
+					list1.Hide();
+					list2.Hide();
+					list3.Hide();
+				}
+			}	
 		}
 
 		private void textBox2_TextChanged(object sender, EventArgs e)
@@ -407,7 +511,13 @@ namespace GalMapEdit
 
 		private void removeAsteroidToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			// remove asteroid menu <todo>
+			if (treeView1.SelectedNode.Tag is Asteroid a)
+			{
+				a.Destroy();
+				
+				statusPanel.Text = "Destroyed an Asteroid!";
+			}
+			refreshTree();
 		}
 
 		private void treeView1_MouseUp(object sender, MouseEventArgs e)
@@ -478,7 +588,7 @@ namespace GalMapEdit
 		{
 			if (treeView1.SelectedNode.Tag is Star tempStar)
 			{
-				newPlanet = new Planet("Planet", "", 23, 42, 55, tempStar);
+				newPlanet = new Planet("Planet", "", 23, 42, 55, 12000, tempStar);
 				tempStar.addPlanet(newPlanet);
 				statusPanel.Text = "Created New Planet!";
 			}
@@ -487,7 +597,31 @@ namespace GalMapEdit
 
 		private void addAsteroidToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			// add asteroid context menu button <todo>
+			// this one is a little different, since there are 3 different lists that asteroids can be in.
+
+			
+			if (treeView1.SelectedNode.Tag == null)																						// null means its floating free in the sector
+			{
+				newAsteroid = new Asteroid((int)rnd.NextDouble() * SECTORSIZE, (int)rnd.NextDouble() * SECTORSIZE, 8, 450, "Asteroid", "", selected);
+				selected.AddAsteroid(newAsteroid);
+			}
+			else if (treeView1.SelectedNode.Tag is Planet p)
+			{
+				newAsteroid = new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", p);
+				p.asteroids.Add(newAsteroid);
+			}
+			else if (treeView1.SelectedNode.Tag is Star s)
+			{
+				newAsteroid = new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", s);
+				s.asteroids.Add(newAsteroid);
+			}
+			else if (treeView1.SelectedNode.Tag is Moon m)
+			{
+				newAsteroid = new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", m);
+				m.asteroids.Add(newAsteroid);
+			}
+			refreshTree();
+			
 		}
 
 		private void removePlanetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -502,7 +636,7 @@ namespace GalMapEdit
 
 		private void addStarToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			newStar = new Star("Star", 27, 27, 32, selected);
+			newStar = new Star("Star", 27, 27, 32, 4000000, selected);
 			selected.stars.Add(newStar);
 			refreshTree();
 			statusPanel.Text = "Created New Star!";
@@ -510,7 +644,7 @@ namespace GalMapEdit
 
 		private void addCometToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			newComet = new Comet(0, 0, "Comet", 52, selected);
+			newComet = new Comet(0, 0, "Comet", "", 52, 120, selected);
 			selected.comets.Add(newComet);
 			refreshTree();
 			statusPanel.Text = "Created New Comet!";
@@ -610,25 +744,45 @@ namespace GalMapEdit
 
 					for (int i = 0; i < (int)(rnd.NextDouble() * 10); i++)
 					{
-						galaxy[x, y].stars.Add(new Star("Star", (int)(rnd.NextDouble() * SECTORSIZE), (int)(rnd.NextDouble() * SECTORSIZE), 32, galaxy[x, y])); 
+						galaxy[x, y].stars.Add(new Star("Star", (int)(rnd.NextDouble() * SECTORSIZE), (int)(rnd.NextDouble() * SECTORSIZE), 32, (int)(rnd.NextDouble() * STAR_MAXMASS + STAR_MINMASS), galaxy[x, y])); 
 					}
 					foreach (Star s in galaxy[x, y].stars)
 					{
 						for (int i = 0; i < (int)(rnd.NextDouble() * 10); i++)
 						{
-							s.planets.Add(new Planet("Planet", "", (int)(rnd.NextDouble() * 32000), (int)(rnd.NextDouble() * 360), 32, s));
+							s.planets.Add(new Planet("Planet", "", (int)(rnd.NextDouble() * PLANET_MAXDIST), (int)(rnd.NextDouble() * 360), 32, (int)(rnd.NextDouble() * PLANET_MAXMASS + PLANET_MINMASS), s));
 						}
 						foreach (Planet p in s.planets)
 						{
 							for (int i = 0; i < (int)(rnd.NextDouble() * 10); i++)
 							{
-								p.moons.Add(new Moon("Moon", "", (int)(rnd.NextDouble() * 24000), (int)(rnd.NextDouble() * 360), 43000000, 24, p));
+								p.moons.Add(new Moon("Moon", "", (int)(rnd.NextDouble() * MOON_MAXDIST), (int)(rnd.NextDouble() * 360), (int)(rnd.NextDouble() * MOON_MAXMASS + MOON_MINMASS), 24, p));
 							}
+							for (int i = 0; i < (int)(rnd.NextDouble() * 10); i++)
+							{
+								p.asteroids.Add(new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 2, 200, "Asteroid", "", p));
+							}
+							foreach (Moon m in p.moons)
+							{
+								for (int i = 0; i < (int)(rnd.NextDouble() * 10); i++)
+								{
+									m.asteroids.Add(new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 2, 200, "Asteroid", "", m));
+								}
+
+							}
+						}
+						for (int i = 0; i < (int)(rnd.NextDouble() * 10); i++)
+						{
+							s.asteroids.Add(new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 2, 200, "Asteroid", "", s));
 						}
 					}
 					for (int i = 0; i < (int)(rnd.NextDouble() * 10); i++)
 					{
-						galaxy[x, y].comets.Add(new Comet((int)rnd.NextDouble()*SECTORSIZE, (int)rnd.NextDouble()*SECTORSIZE, "Comet", 8, galaxy[x, y]));
+						galaxy[x, y].comets.Add(new Comet((int)rnd.NextDouble()*SECTORSIZE, (int)rnd.NextDouble()*SECTORSIZE, "Comet", "",  8, (int)(rnd.NextDouble() * COMET_MAXMASS + COMET_MINMASS), galaxy[x, y]));
+					}
+					for (int i = 0; i < (int)(rnd.NextDouble() * 10); i++)
+					{
+						galaxy[x, y].asteroids.Add(new Asteroid((int)rnd.NextDouble() * SECTORSIZE, (int)rnd.NextDouble() * SECTORSIZE, 2, 200, "Asteroid", "", galaxy[x, y]));
 					}
 				}
 			}
@@ -738,6 +892,36 @@ namespace GalMapEdit
 				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 				binaryFormatter.Serialize(stream, objectToWrite);
 			}
+		}
+
+		private void nameBox_TextChanged(object sender, EventArgs e)
+		{
+			// can be anything but you gotta put a limit on length at some point
+		}
+
+		private void typeBox_TextChanged(object sender, EventArgs e)
+		{
+			// can only be integers less than integer.maxvalue
+		}
+
+		private void massBox_TextChanged(object sender, EventArgs e)
+		{
+			// can only be integers less than type.mass_max
+		}
+
+		private void distBox_TextChanged(object sender, EventArgs e)
+		{
+			// can only be integers less than dist.max
+		}
+
+		private void angleBox_TextChanged(object sender, EventArgs e)
+		{
+			// can only be integers less or equal to 360
+		}
+
+		private void descBox_TextChanged(object sender, EventArgs e)
+		{
+			// can be anything but limits etc
 		}
 
 		public static T ReadFromBinaryFile<T>(string filePath)

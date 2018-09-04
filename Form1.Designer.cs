@@ -77,6 +77,7 @@
 			this.distBox = new System.Windows.Forms.TextBox();
 			this.typeBox = new System.Windows.Forms.TextBox();
 			this.nameBox = new System.Windows.Forms.TextBox();
+			this.list3 = new System.Windows.Forms.ListBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.contextMenuStrip1.SuspendLayout();
 			this.contextMenuStrip2.SuspendLayout();
@@ -384,6 +385,7 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.list3);
 			this.groupBox1.Controls.Add(this.descBox);
 			this.groupBox1.Controls.Add(this.list2);
 			this.groupBox1.Controls.Add(this.massBox);
@@ -401,11 +403,12 @@
 			// 
 			// descBox
 			// 
-			this.descBox.Location = new System.Drawing.Point(6, 226);
+			this.descBox.Location = new System.Drawing.Point(6, 262);
 			this.descBox.Multiline = true;
 			this.descBox.Name = "descBox";
-			this.descBox.Size = new System.Drawing.Size(168, 251);
+			this.descBox.Size = new System.Drawing.Size(168, 215);
 			this.descBox.TabIndex = 7;
+			this.descBox.TextChanged += new System.EventHandler(this.descBox_TextChanged);
 			// 
 			// list2
 			// 
@@ -421,6 +424,7 @@
 			this.massBox.Name = "massBox";
 			this.massBox.Size = new System.Drawing.Size(121, 20);
 			this.massBox.TabIndex = 1;
+			this.massBox.TextChanged += new System.EventHandler(this.massBox_TextChanged);
 			// 
 			// list1
 			// 
@@ -436,6 +440,7 @@
 			this.angleBox.Name = "angleBox";
 			this.angleBox.Size = new System.Drawing.Size(121, 20);
 			this.angleBox.TabIndex = 4;
+			this.angleBox.TextChanged += new System.EventHandler(this.angleBox_TextChanged);
 			// 
 			// distBox
 			// 
@@ -443,6 +448,7 @@
 			this.distBox.Name = "distBox";
 			this.distBox.Size = new System.Drawing.Size(121, 20);
 			this.distBox.TabIndex = 3;
+			this.distBox.TextChanged += new System.EventHandler(this.distBox_TextChanged);
 			// 
 			// typeBox
 			// 
@@ -450,6 +456,7 @@
 			this.typeBox.Name = "typeBox";
 			this.typeBox.Size = new System.Drawing.Size(121, 20);
 			this.typeBox.TabIndex = 2;
+			this.typeBox.TextChanged += new System.EventHandler(this.typeBox_TextChanged);
 			// 
 			// nameBox
 			// 
@@ -457,6 +464,15 @@
 			this.nameBox.Name = "nameBox";
 			this.nameBox.Size = new System.Drawing.Size(121, 20);
 			this.nameBox.TabIndex = 0;
+			this.nameBox.TextChanged += new System.EventHandler(this.nameBox_TextChanged);
+			// 
+			// list3
+			// 
+			this.list3.FormattingEnabled = true;
+			this.list3.Location = new System.Drawing.Point(53, 226);
+			this.list3.Name = "list3";
+			this.list3.Size = new System.Drawing.Size(120, 30);
+			this.list3.TabIndex = 8;
 			// 
 			// Form1
 			// 
@@ -543,6 +559,7 @@
 		private System.Windows.Forms.TextBox distBox;
 		private System.Windows.Forms.TextBox typeBox;
 		private System.Windows.Forms.TextBox descBox;
+		private System.Windows.Forms.ListBox list3;
 	}
 }
 

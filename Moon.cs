@@ -17,11 +17,14 @@ namespace GalMapEdit
 
 		private int mass;
 
-		public UInt16 type;
+		public int type;
+
+		public List<Asteroid> asteroids;
+
 
 		private Planet host;
 
-		public Moon(string Name, string Desc, int dist, int ang, int Mass, UInt16 Type, Planet Host )
+		public Moon(string Name, string Desc, int dist, int ang, int Mass, int Type, Planet Host )
 		{
 			name = Name;
 			desc = Desc;
@@ -30,6 +33,7 @@ namespace GalMapEdit
 			mass = Mass;
 			type = Type;
 			host = Host;
+			asteroids = new List<Asteroid>();
 		}
 
 		public string getName()

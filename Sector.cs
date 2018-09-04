@@ -14,15 +14,17 @@ namespace GalMapEdit
 		public string name;
 		public int x;
 		public int y;
-
 		
 		public List<Star> stars;
 		public List<Comet> comets;
+		public List<Asteroid> asteroids;
+
 
 		public Sector(string n, int xcoord, int ycoord)
 		{
 			stars = new List<Star>();
 			comets = new List<Comet>();
+			asteroids = new List<Asteroid>();
 
 			name = n;
 
@@ -38,7 +40,10 @@ namespace GalMapEdit
 		{
 			comets.Add(com);
 		}
-
+		public void AddAsteroid(Asteroid ast)
+		{
+			asteroids.Add(ast);
+		}
 
 	}
 }

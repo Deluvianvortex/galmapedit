@@ -12,18 +12,21 @@ namespace GalMapEdit
 		public int x, y;
 
 		public string name;
-		public UInt16 type;
+		public int type;
 		public int mass;
+		public string desc;
 
 		private Sector host;
 
-		public Comet(int X, int Y, string n, UInt16 Type, Sector Host)
+		public Comet(int X, int Y, string n, string d, int Type, int Mass, Sector Host)
 		{
 			x = X;
 			y = Y;
 			name = n;
 			type = Type;
 			host = Host;
+			mass = Mass;
+			desc = d;
 		}
 
 		public void Destroy()

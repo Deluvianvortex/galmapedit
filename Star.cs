@@ -15,20 +15,21 @@ namespace GalMapEdit
 
 		public int mass;
 
-		public UInt32 type;
+		public int type;
 
 		public List<Planet> planets = new List<Planet>();
 		public List<Asteroid> asteroids = new List<Asteroid>();
 
 		private Sector host;
 
-		public Star(string n, int x1, int y1, UInt16 Type, Sector Host)
+		public Star(string n, int x1, int y1, int Type, int Mass, Sector Host)
 		{
 			name = n;
 			x = x1;
 			y = y1;
 			type = Type;
 			host = Host;
+			mass = Mass;
 		}
 
 		public void addAsteroid(Asteroid ast)
