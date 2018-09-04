@@ -47,8 +47,8 @@ Version 1.1:
 I found a horrible bug and fixed it so hopefully the thing won't crash on people anymore
 
 Version 1.2: 
-Rewrote the sorting algorithm so that its less confusing to read and also works now
-You can now add and remove asteroids in all levels of the hierarchy
-Comets now have descriptions
-You still cannot edit the information in the editor window (coming soon) but it does appear properly now 
+Rewrote the sorting algorithm so that its less confusing to read and also works now. 
+You can now add and remove asteroids in all levels of the hierarchy. 
+Comets now have descriptions. 
+You still cannot edit the information in the editor window (coming soon) but it does appear properly now.  
              
