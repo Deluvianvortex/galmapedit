@@ -8,7 +8,7 @@ Requirements: .NET 4.5 and a computer capable of running that distro (windows de
 
 # Quick N Dirty Tutorial
 
-Compile the program an open the executable. 
+Compile the program and open the executable. 
 
 You will see a gridview on the left. This is the Galaxy Map. Clicking on any of the gridsquares will load that particular sector
 into the editor window on the right.
