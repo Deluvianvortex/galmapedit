@@ -30,8 +30,6 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.addPlanetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,6 +67,22 @@
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.descEditBtn = new System.Windows.Forms.Button();
+			this.angEditBtn = new System.Windows.Forms.Button();
+			this.distEditBtn = new System.Windows.Forms.Button();
+			this.massEditBtn = new System.Windows.Forms.Button();
+			this.typeEditBtn = new System.Windows.Forms.Button();
+			this.nameEditBtn = new System.Windows.Forms.Button();
+			this.descLbl = new System.Windows.Forms.Label();
+			this.list3Lbl = new System.Windows.Forms.Label();
+			this.list2Lbl = new System.Windows.Forms.Label();
+			this.list1Lbl = new System.Windows.Forms.Label();
+			this.angLbl = new System.Windows.Forms.Label();
+			this.distLbl = new System.Windows.Forms.Label();
+			this.massLbl = new System.Windows.Forms.Label();
+			this.typeLbl = new System.Windows.Forms.Label();
+			this.nameLbl = new System.Windows.Forms.Label();
+			this.list3 = new System.Windows.Forms.ListBox();
 			this.descBox = new System.Windows.Forms.TextBox();
 			this.list2 = new System.Windows.Forms.ListBox();
 			this.massBox = new System.Windows.Forms.TextBox();
@@ -77,7 +91,6 @@
 			this.distBox = new System.Windows.Forms.TextBox();
 			this.typeBox = new System.Windows.Forms.TextBox();
 			this.nameBox = new System.Windows.Forms.TextBox();
-			this.list3 = new System.Windows.Forms.ListBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.contextMenuStrip1.SuspendLayout();
 			this.contextMenuStrip2.SuspendLayout();
@@ -95,34 +108,18 @@
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Location = new System.Drawing.Point(12, 44);
+			this.pictureBox1.Location = new System.Drawing.Point(12, 27);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(905, 905);
 			this.pictureBox1.TabIndex = 0;
 			this.pictureBox1.TabStop = false;
 			this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
 			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(987, 27);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(25, 20);
-			this.textBox1.TabIndex = 1;
-			this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-			// 
-			// textBox2
-			// 
-			this.textBox2.Location = new System.Drawing.Point(1034, 27);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(25, 20);
-			this.textBox2.TabIndex = 2;
-			this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-			// 
 			// treeView1
 			// 
-			this.treeView1.Location = new System.Drawing.Point(923, 53);
+			this.treeView1.Location = new System.Drawing.Point(923, 27);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(180, 406);
+			this.treeView1.Size = new System.Drawing.Size(180, 432);
 			this.treeView1.TabIndex = 4;
 			this.treeView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDoubleClick);
 			this.treeView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseUp);
@@ -385,6 +382,21 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.descEditBtn);
+			this.groupBox1.Controls.Add(this.angEditBtn);
+			this.groupBox1.Controls.Add(this.distEditBtn);
+			this.groupBox1.Controls.Add(this.massEditBtn);
+			this.groupBox1.Controls.Add(this.typeEditBtn);
+			this.groupBox1.Controls.Add(this.nameEditBtn);
+			this.groupBox1.Controls.Add(this.descLbl);
+			this.groupBox1.Controls.Add(this.list3Lbl);
+			this.groupBox1.Controls.Add(this.list2Lbl);
+			this.groupBox1.Controls.Add(this.list1Lbl);
+			this.groupBox1.Controls.Add(this.angLbl);
+			this.groupBox1.Controls.Add(this.distLbl);
+			this.groupBox1.Controls.Add(this.massLbl);
+			this.groupBox1.Controls.Add(this.typeLbl);
+			this.groupBox1.Controls.Add(this.nameLbl);
 			this.groupBox1.Controls.Add(this.list3);
 			this.groupBox1.Controls.Add(this.descBox);
 			this.groupBox1.Controls.Add(this.list2);
@@ -396,83 +408,218 @@
 			this.groupBox1.Controls.Add(this.nameBox);
 			this.groupBox1.Location = new System.Drawing.Point(923, 466);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(180, 483);
+			this.groupBox1.Size = new System.Drawing.Size(180, 490);
 			this.groupBox1.TabIndex = 11;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Editor:";
 			// 
-			// descBox
+			// descEditBtn
 			// 
-			this.descBox.Location = new System.Drawing.Point(6, 262);
-			this.descBox.Multiline = true;
-			this.descBox.Name = "descBox";
-			this.descBox.Size = new System.Drawing.Size(168, 215);
-			this.descBox.TabIndex = 7;
-			this.descBox.TextChanged += new System.EventHandler(this.descBox_TextChanged);
+			this.descEditBtn.Location = new System.Drawing.Point(159, 261);
+			this.descEditBtn.Name = "descEditBtn";
+			this.descEditBtn.Size = new System.Drawing.Size(15, 13);
+			this.descEditBtn.TabIndex = 23;
+			this.descEditBtn.UseVisualStyleBackColor = true;
+			this.descEditBtn.Click += new System.EventHandler(this.descEditBtn_Click);
 			// 
-			// list2
+			// angEditBtn
 			// 
-			this.list2.FormattingEnabled = true;
-			this.list2.Location = new System.Drawing.Point(53, 190);
-			this.list2.Name = "list2";
-			this.list2.Size = new System.Drawing.Size(121, 30);
-			this.list2.TabIndex = 6;
+			this.angEditBtn.Location = new System.Drawing.Point(159, 127);
+			this.angEditBtn.Name = "angEditBtn";
+			this.angEditBtn.Size = new System.Drawing.Size(15, 20);
+			this.angEditBtn.TabIndex = 22;
+			this.angEditBtn.UseVisualStyleBackColor = true;
+			this.angEditBtn.Click += new System.EventHandler(this.angEditBtn_Click);
 			// 
-			// massBox
+			// distEditBtn
 			// 
-			this.massBox.Location = new System.Drawing.Point(53, 71);
-			this.massBox.Name = "massBox";
-			this.massBox.Size = new System.Drawing.Size(121, 20);
-			this.massBox.TabIndex = 1;
-			this.massBox.TextChanged += new System.EventHandler(this.massBox_TextChanged);
+			this.distEditBtn.Location = new System.Drawing.Point(159, 101);
+			this.distEditBtn.Name = "distEditBtn";
+			this.distEditBtn.Size = new System.Drawing.Size(15, 20);
+			this.distEditBtn.TabIndex = 21;
+			this.distEditBtn.UseVisualStyleBackColor = true;
+			this.distEditBtn.Click += new System.EventHandler(this.distEditBtn_Click);
 			// 
-			// list1
+			// massEditBtn
 			// 
-			this.list1.FormattingEnabled = true;
-			this.list1.Location = new System.Drawing.Point(53, 154);
-			this.list1.Name = "list1";
-			this.list1.Size = new System.Drawing.Size(121, 30);
-			this.list1.TabIndex = 5;
+			this.massEditBtn.Location = new System.Drawing.Point(159, 71);
+			this.massEditBtn.Name = "massEditBtn";
+			this.massEditBtn.Size = new System.Drawing.Size(15, 20);
+			this.massEditBtn.TabIndex = 20;
+			this.massEditBtn.UseVisualStyleBackColor = true;
+			this.massEditBtn.Click += new System.EventHandler(this.massEditBtn_Click);
 			// 
-			// angleBox
+			// typeEditBtn
 			// 
-			this.angleBox.Location = new System.Drawing.Point(53, 127);
-			this.angleBox.Name = "angleBox";
-			this.angleBox.Size = new System.Drawing.Size(121, 20);
-			this.angleBox.TabIndex = 4;
-			this.angleBox.TextChanged += new System.EventHandler(this.angleBox_TextChanged);
+			this.typeEditBtn.Location = new System.Drawing.Point(159, 45);
+			this.typeEditBtn.Name = "typeEditBtn";
+			this.typeEditBtn.Size = new System.Drawing.Size(15, 20);
+			this.typeEditBtn.TabIndex = 19;
+			this.typeEditBtn.UseVisualStyleBackColor = true;
+			this.typeEditBtn.Click += new System.EventHandler(this.typeEditBtn_Click);
 			// 
-			// distBox
+			// nameEditBtn
 			// 
-			this.distBox.Location = new System.Drawing.Point(53, 100);
-			this.distBox.Name = "distBox";
-			this.distBox.Size = new System.Drawing.Size(121, 20);
-			this.distBox.TabIndex = 3;
-			this.distBox.TextChanged += new System.EventHandler(this.distBox_TextChanged);
+			this.nameEditBtn.Location = new System.Drawing.Point(159, 19);
+			this.nameEditBtn.Name = "nameEditBtn";
+			this.nameEditBtn.Size = new System.Drawing.Size(15, 20);
+			this.nameEditBtn.TabIndex = 18;
+			this.nameEditBtn.UseVisualStyleBackColor = true;
+			this.nameEditBtn.Click += new System.EventHandler(this.nameEditBtn_Click);
 			// 
-			// typeBox
+			// descLbl
 			// 
-			this.typeBox.Location = new System.Drawing.Point(53, 45);
-			this.typeBox.Name = "typeBox";
-			this.typeBox.Size = new System.Drawing.Size(121, 20);
-			this.typeBox.TabIndex = 2;
-			this.typeBox.TextChanged += new System.EventHandler(this.typeBox_TextChanged);
+			this.descLbl.AutoSize = true;
+			this.descLbl.Location = new System.Drawing.Point(7, 261);
+			this.descLbl.Name = "descLbl";
+			this.descLbl.Size = new System.Drawing.Size(63, 13);
+			this.descLbl.TabIndex = 17;
+			this.descLbl.Text = "Description:";
 			// 
-			// nameBox
+			// list3Lbl
 			// 
-			this.nameBox.Location = new System.Drawing.Point(53, 19);
-			this.nameBox.Name = "nameBox";
-			this.nameBox.Size = new System.Drawing.Size(121, 20);
-			this.nameBox.TabIndex = 0;
-			this.nameBox.TextChanged += new System.EventHandler(this.nameBox_TextChanged);
+			this.list3Lbl.AutoSize = true;
+			this.list3Lbl.Location = new System.Drawing.Point(4, 226);
+			this.list3Lbl.Name = "list3Lbl";
+			this.list3Lbl.Size = new System.Drawing.Size(25, 13);
+			this.list3Lbl.TabIndex = 16;
+			this.list3Lbl.Text = "list3";
+			// 
+			// list2Lbl
+			// 
+			this.list2Lbl.AutoSize = true;
+			this.list2Lbl.Location = new System.Drawing.Point(3, 190);
+			this.list2Lbl.Name = "list2Lbl";
+			this.list2Lbl.Size = new System.Drawing.Size(25, 13);
+			this.list2Lbl.TabIndex = 15;
+			this.list2Lbl.Text = "list2";
+			// 
+			// list1Lbl
+			// 
+			this.list1Lbl.AutoSize = true;
+			this.list1Lbl.Location = new System.Drawing.Point(4, 154);
+			this.list1Lbl.Name = "list1Lbl";
+			this.list1Lbl.Size = new System.Drawing.Size(25, 13);
+			this.list1Lbl.TabIndex = 14;
+			this.list1Lbl.Text = "list1";
+			// 
+			// angLbl
+			// 
+			this.angLbl.AutoSize = true;
+			this.angLbl.Location = new System.Drawing.Point(4, 130);
+			this.angLbl.Name = "angLbl";
+			this.angLbl.Size = new System.Drawing.Size(43, 13);
+			this.angLbl.TabIndex = 13;
+			this.angLbl.Text = "Ang (y):";
+			// 
+			// distLbl
+			// 
+			this.distLbl.AutoSize = true;
+			this.distLbl.Location = new System.Drawing.Point(6, 103);
+			this.distLbl.Name = "distLbl";
+			this.distLbl.Size = new System.Drawing.Size(45, 13);
+			this.distLbl.TabIndex = 12;
+			this.distLbl.Text = "Dist (x): ";
+			// 
+			// massLbl
+			// 
+			this.massLbl.AutoSize = true;
+			this.massLbl.Location = new System.Drawing.Point(12, 74);
+			this.massLbl.Name = "massLbl";
+			this.massLbl.Size = new System.Drawing.Size(35, 13);
+			this.massLbl.TabIndex = 11;
+			this.massLbl.Text = "Mass:";
+			// 
+			// typeLbl
+			// 
+			this.typeLbl.AutoSize = true;
+			this.typeLbl.Location = new System.Drawing.Point(13, 48);
+			this.typeLbl.Name = "typeLbl";
+			this.typeLbl.Size = new System.Drawing.Size(34, 13);
+			this.typeLbl.TabIndex = 10;
+			this.typeLbl.Text = "Type:";
+			// 
+			// nameLbl
+			// 
+			this.nameLbl.AutoSize = true;
+			this.nameLbl.Location = new System.Drawing.Point(9, 22);
+			this.nameLbl.Name = "nameLbl";
+			this.nameLbl.Size = new System.Drawing.Size(38, 13);
+			this.nameLbl.TabIndex = 9;
+			this.nameLbl.Text = "Name:";
 			// 
 			// list3
 			// 
 			this.list3.FormattingEnabled = true;
 			this.list3.Location = new System.Drawing.Point(53, 226);
 			this.list3.Name = "list3";
-			this.list3.Size = new System.Drawing.Size(120, 30);
+			this.list3.Size = new System.Drawing.Size(100, 30);
 			this.list3.TabIndex = 8;
+			// 
+			// descBox
+			// 
+			this.descBox.Location = new System.Drawing.Point(6, 280);
+			this.descBox.Multiline = true;
+			this.descBox.Name = "descBox";
+			this.descBox.ReadOnly = true;
+			this.descBox.Size = new System.Drawing.Size(168, 197);
+			this.descBox.TabIndex = 7;
+			// 
+			// list2
+			// 
+			this.list2.FormattingEnabled = true;
+			this.list2.Location = new System.Drawing.Point(53, 190);
+			this.list2.Name = "list2";
+			this.list2.Size = new System.Drawing.Size(100, 30);
+			this.list2.TabIndex = 6;
+			// 
+			// massBox
+			// 
+			this.massBox.Location = new System.Drawing.Point(53, 71);
+			this.massBox.Name = "massBox";
+			this.massBox.ReadOnly = true;
+			this.massBox.Size = new System.Drawing.Size(100, 20);
+			this.massBox.TabIndex = 1;
+			// 
+			// list1
+			// 
+			this.list1.FormattingEnabled = true;
+			this.list1.Location = new System.Drawing.Point(53, 154);
+			this.list1.Name = "list1";
+			this.list1.Size = new System.Drawing.Size(100, 30);
+			this.list1.TabIndex = 5;
+			// 
+			// angleBox
+			// 
+			this.angleBox.Location = new System.Drawing.Point(53, 127);
+			this.angleBox.Name = "angleBox";
+			this.angleBox.ReadOnly = true;
+			this.angleBox.Size = new System.Drawing.Size(100, 20);
+			this.angleBox.TabIndex = 4;
+			// 
+			// distBox
+			// 
+			this.distBox.Location = new System.Drawing.Point(52, 101);
+			this.distBox.Name = "distBox";
+			this.distBox.ReadOnly = true;
+			this.distBox.Size = new System.Drawing.Size(101, 20);
+			this.distBox.TabIndex = 3;
+			// 
+			// typeBox
+			// 
+			this.typeBox.Location = new System.Drawing.Point(53, 45);
+			this.typeBox.Name = "typeBox";
+			this.typeBox.ReadOnly = true;
+			this.typeBox.Size = new System.Drawing.Size(100, 20);
+			this.typeBox.TabIndex = 2;
+			// 
+			// nameBox
+			// 
+			this.nameBox.Location = new System.Drawing.Point(53, 19);
+			this.nameBox.Name = "nameBox";
+			this.nameBox.ReadOnly = true;
+			this.nameBox.Size = new System.Drawing.Size(100, 20);
+			this.nameBox.TabIndex = 0;
 			// 
 			// Form1
 			// 
@@ -482,8 +629,6 @@
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.menuStrip1);
 			this.Controls.Add(this.treeView1);
-			this.Controls.Add(this.textBox2);
-			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.pictureBox1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Form1";
@@ -512,8 +657,6 @@
 		#endregion
 
 		private System.Windows.Forms.PictureBox pictureBox1;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.TreeView treeView1;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem addPlanetToolStripMenuItem;
@@ -560,6 +703,21 @@
 		private System.Windows.Forms.TextBox typeBox;
 		private System.Windows.Forms.TextBox descBox;
 		private System.Windows.Forms.ListBox list3;
+		private System.Windows.Forms.Label angLbl;
+		private System.Windows.Forms.Label distLbl;
+		private System.Windows.Forms.Label massLbl;
+		private System.Windows.Forms.Label typeLbl;
+		private System.Windows.Forms.Label nameLbl;
+		private System.Windows.Forms.Label list1Lbl;
+		private System.Windows.Forms.Button nameEditBtn;
+		private System.Windows.Forms.Label descLbl;
+		private System.Windows.Forms.Label list3Lbl;
+		private System.Windows.Forms.Label list2Lbl;
+		private System.Windows.Forms.Button typeEditBtn;
+		private System.Windows.Forms.Button descEditBtn;
+		private System.Windows.Forms.Button angEditBtn;
+		private System.Windows.Forms.Button distEditBtn;
+		private System.Windows.Forms.Button massEditBtn;
 	}
 }
 

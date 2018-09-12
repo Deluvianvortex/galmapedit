@@ -9,7 +9,7 @@ namespace GalMapEdit
 	[Serializable]
 	class Star
 	{
-		public string name;
+		public string name, desc;
 		public int x;
 		public int y;
 
@@ -22,11 +22,12 @@ namespace GalMapEdit
 
 		private Sector host;
 
-		public Star(string n, int x1, int y1, int Type, int Mass, Sector Host)
+		public Star(string n, string d, int x1, int y1, int Type, int Mass, Sector Host)
 		{
 			name = n;
 			x = x1;
 			y = y1;
+			desc = d;
 			type = Type;
 			host = Host;
 			mass = Mass;

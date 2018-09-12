@@ -9,12 +9,12 @@ namespace GalMapEdit
 	[Serializable]
 	class Planet
 	{
-		private string name;                     // planet name
-		private string desc;
+		public string name;                     // planet name
+		public string desc;
 
-		private int distance;					// distance from host star
-		private int angle;                      // angle from host star
-		private int mass;
+		public int distance;					// distance from host star
+		public int angle;                      // angle from host star
+		public int mass;
 
 		public int type;
 
@@ -57,6 +57,11 @@ namespace GalMapEdit
 		public int getMass()
 		{
 			return mass;
+		}
+
+		public void setName(string n)
+		{
+			name = n;
 		}
 
 		public void Destroy()

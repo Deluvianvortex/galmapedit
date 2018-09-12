@@ -9,13 +9,13 @@ namespace GalMapEdit
 	[Serializable]
 	class Moon
 	{
-		private string name;
-		private string desc;
+		public string name;
+		public string desc;
 
-		private int distance;
-		private int angle;
+		public int distance;
+		public int angle;
 
-		private int mass;
+		public int mass;
 
 		public int type;
 
