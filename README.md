@@ -2,9 +2,9 @@
 
 The Galaxy Map Editor for Legacy 
 
-Version 1.2
+Version 1.3
 
-Requirements: .NET 4.5 and a computer capable of running that distro (windows definately, linux/macos probably, not others)
+Requirements: .NET 4.6
 
 # Quick N Dirty Tutorial
 
@@ -31,7 +31,9 @@ Then you'll see that information appears in the sectors, in the treeview window.
 
 If you double-click any object in the treeview, you can see that object's variables in the Editor Window. 
 
-Work continues.
+If you want to edit those variables, you can click the button directly to the right of the box. If your input parses wrong, it will just keep the last accepted number, but it will not show a warning it did so. 
+
+
 
 
 -DV
@@ -52,3 +54,7 @@ You can now add and remove asteroids in all levels of the hierarchy.
 Comets now have descriptions. 
 You still cannot edit the information in the editor window (coming soon) but it does appear properly now.  
              
+Version 1.3:
+Removed the sector x/y boxes as they were pointless, that information now appears in the sector treeview.
+Added variable edit boxes for all stellar objects in the editor window.
+Fixed more bugs.
