@@ -52,10 +52,7 @@ namespace GalMapEdit
 		private Sector selected;																									// this is the currently selected sector
 
 		private Comet newComet;																										// these are here for when a new object needs to transcend scope
-		private Star newStar;
-		private Planet newPlanet;
 		private Moon newMoon;
-		private Asteroid newAsteroid;
 
 		private Random rnd;																											// as per technet instructions, only make a single random instance
 
@@ -151,6 +148,12 @@ namespace GalMapEdit
 		private void refreshTree()																									// Refreshes the Treeview Window
 		{
 			string curSector = " [" + selected.x.ToString() + ", " + selected.y.ToString() + "]";
+			string starsCount = " [" + selected.stars.Count + "]";
+			string cometsCount = " [" + selected.comets.Count + "]";
+			string asteroidsCount = " [" + selected.asteroids.Count + "]";
+
+			Sector root = new Sector("test", 0, 0);
+
 
 			treeView1.Nodes.Clear();																								// Clear any nodes that are in the treeview already
 			treeView1.BeginUpdate();																								// Start the update for the treeview
@@ -158,7 +161,7 @@ namespace GalMapEdit
 			treeQueue = new List<TreeItem>()																						// reset the list, or create it if it doesn't exist
 			{
 				new TreeItem("Sector" + curSector, 1, 0),																			// sector is the root node
-				new TreeItem("Stars", 2, 1),																						 
+				new TreeItem("Stars", 2, 1) {tag = root },																						 
 				new TreeItem("Comets", 3, 1),																						// comets is the third child node
 				new TreeItem("Asteroids", 4, 1)																						// etc
 			};
@@ -209,7 +212,7 @@ namespace GalMapEdit
 						}
 					}
 					int planetAsteroidsRoot = i;
-					treeQueue.Add(new TreeItem("Asteroids", i, planetRoot) { tag = p });
+					treeQueue.Add(new TreeItem("Asteroids", i, planetRoot) { tag = p });											// make an "Asteroids" subnode
 					i++;
 					foreach (Asteroid ast in p.asteroids)
 					{
@@ -234,7 +237,7 @@ namespace GalMapEdit
 			treeQueue.Clear();
 		}
 
-		private void PopulateTreeView(int parentId, TreeNode parentNode)
+		private void PopulateTreeView(int parentId, TreeNode parentNode)															// this populates the treeview window
 		{
 			var filteredItems = treeQueue.Where(item =>																				// some linq bullshit to filter out the correct nodes
 										item.parentID == parentId);
@@ -269,7 +272,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void Form1_Load(object sender, EventArgs e)
+		private void Form1_Load(object sender, EventArgs e)                                                                         // more boilerplate stuff
 		{
 			pictureBox1.BackColor = Color.Black;																					// I have to set these handlers this way because the designer wouldn't
 			pictureBox1.Paint += new PaintEventHandler(this.pictureBox1_Paint);														// let me do it right, but it works.
@@ -277,7 +280,7 @@ namespace GalMapEdit
 			pictureBox1.Click += new EventHandler(this.pictureBox1_Click);
 			
 			Controls.Add(pictureBox1);
-		}
+		}																		
 
 		private void pictureBox1_Paint(object sender, PaintEventArgs e)																// this draws the grid (and anything else) in the picturebox
 		{
@@ -300,9 +303,9 @@ namespace GalMapEdit
 
 		
 
-		private void treeView1_MouseDoubleClick(object sender, MouseEventArgs e)
+		private void treeView1_MouseDoubleClick(object sender, MouseEventArgs e)                                                    // loads the doubleclicked object into the editor
 		{
-			// loads the doubleclicked object into the editor
+			
 			if (treeView1.SelectedNode.Tag != null)
 			{
 				select = treeView1.SelectedNode.Tag;
@@ -407,7 +410,7 @@ namespace GalMapEdit
 					onelist.Clear();
 					foreach (Planet pl in st.planets)
 					{
-						onelist.Add(pl.getName());
+						onelist.Add(pl.name);
 					}
 					list1.DataSource = onelist;
 					foreach (Asteroid ast in st.asteroids)
@@ -461,12 +464,12 @@ namespace GalMapEdit
 				if (select is Planet p)
 				{
 					nameBox.Show();
-					nameBox.Text = p.getName();
+					nameBox.Text = p.name;
 					nameLbl.Show();
 					nameEditBtn.Show();
 
 					massBox.Show();
-					massBox.Text = p.getMass().ToString();
+					massBox.Text = p.mass.ToString();
 					massEditBtn.Show();
 					massLbl.Show();
 
@@ -476,17 +479,17 @@ namespace GalMapEdit
 					typeEditBtn.Show();
 
 					distBox.Show();
-					distBox.Text = p.getDistance().ToString();
+					distBox.Text = p.x.ToString();
 					distLbl.Show();
 					distEditBtn.Show();
 
 					angleBox.Show();
-					angleBox.Text = p.getAngle().ToString();
+					angleBox.Text = p.y.ToString();
 					angLbl.Show();
 					angEditBtn.Show();
 
 					descBox.Show();
-					descBox.Text = p.getDescription();
+					descBox.Text = p.desc;
 					descLbl.Show();
 					descEditBtn.Show();
 
@@ -498,7 +501,7 @@ namespace GalMapEdit
 					list1.Show();
 					foreach (Moon mo in p.moons)
 					{
-						onelist.Add(mo.getName());
+						onelist.Add(mo.name);
 					}
 					list1.DataSource = onelist;
 
@@ -517,12 +520,12 @@ namespace GalMapEdit
 				if (select is Moon m)
 				{
 					nameBox.Show();
-					nameBox.Text = m.getName();
+					nameBox.Text = m.name;
 					nameLbl.Show();
 					nameEditBtn.Show();
 
 					massBox.Show();
-					massBox.Text = m.getMass().ToString();
+					massBox.Text = m.mass.ToString();
 					massLbl.Show();
 					massEditBtn.Show();
 
@@ -532,17 +535,17 @@ namespace GalMapEdit
 					typeEditBtn.Show();
 
 					distBox.Show();
-					distBox.Text = m.getDistance().ToString();
+					distBox.Text = m.x.ToString();
 					distLbl.Show();
 					distEditBtn.Show();
 
 					angleBox.Show();
-					angleBox.Text = m.getAngle().ToString();
+					angleBox.Text = m.y.ToString();
 					angLbl.Show();
 					angEditBtn.Show();
 
 					descBox.Show();
-					descBox.Text = m.getDescription();
+					descBox.Text = m.desc;
 					descLbl.Show();
 					descEditBtn.Show();
 
@@ -607,7 +610,7 @@ namespace GalMapEdit
 			}	
 		}
 
-		private void removeAsteroidToolStripMenuItem_Click(object sender, EventArgs e)
+		private void removeAsteroidToolStripMenuItem_Click(object sender, EventArgs e)												// Destroy Asteroid Menu
 		{
 			if (treeView1.SelectedNode.Tag is Asteroid a)
 			{
@@ -618,13 +621,13 @@ namespace GalMapEdit
 			refreshTree();
 		}
 
-		private void treeView1_MouseUp(object sender, MouseEventArgs e)
+		private void treeView1_MouseUp(object sender, MouseEventArgs e)                                                             // All right clicks in the treeview add/remove objects to the sector
 		{
-			if (e.Button == MouseButtons.Right)																						// All right clicks in the treeview add/remove objects to the sector
+			if (e.Button == MouseButtons.Right)																						
 			{
 				// Select the clicked node
 				treeView1.SelectedNode = treeView1.GetNodeAt(e.X, e.Y);
-
+				 
 				if (treeView1.SelectedNode != null)
 				{
 
@@ -682,47 +685,42 @@ namespace GalMapEdit
 			}
 		}
 
-		private void contextMenuStrip1_Click(object sender, EventArgs e)
+		private void contextMenuStrip1_Click(object sender, EventArgs e)															// New Planet Menu
 		{
 			if (treeView1.SelectedNode.Tag is Star tempStar)
 			{
-				newPlanet = new Planet("Planet", "", 23, 42, 55, 12000, tempStar);
-				tempStar.addPlanet(newPlanet);
+				tempStar.addPlanet(new Planet("Planet", "", 23, 42, 55, 12000, tempStar));
 				statusPanel.Text = "Created New Planet!";
 			}
 			refreshTree();
 		}
 
-		private void addAsteroidToolStripMenuItem_Click(object sender, EventArgs e)
+		private void addAsteroidToolStripMenuItem_Click(object sender, EventArgs e)													// New Asteroid Menu
 		{
 			// this one is a little different, since there are 3 different lists that asteroids can be in.
 
 			
-			if (treeView1.SelectedNode.Tag == null)																						// null means its floating free in the sector
+			if (treeView1.SelectedNode.Tag == null)																					// null means its floating free in the sector
 			{
-				newAsteroid = new Asteroid((int)rnd.NextDouble() * SECTORSIZE, (int)rnd.NextDouble() * SECTORSIZE, 8, 450, "Asteroid", "", selected);
-				selected.AddAsteroid(newAsteroid);
+				selected.AddAsteroid(new Asteroid((int)rnd.NextDouble() * SECTORSIZE, (int)rnd.NextDouble() * SECTORSIZE, 8, 450, "Asteroid", "", selected));
 			}
 			else if (treeView1.SelectedNode.Tag is Planet p)
 			{
-				newAsteroid = new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", p);
-				p.asteroids.Add(newAsteroid);
+				p.asteroids.Add(new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", p));
 			}
 			else if (treeView1.SelectedNode.Tag is Star s)
 			{
-				newAsteroid = new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", s);
-				s.asteroids.Add(newAsteroid);
+				s.asteroids.Add(new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", s));
 			}
 			else if (treeView1.SelectedNode.Tag is Moon m)
 			{
-				newAsteroid = new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", m);
-				m.asteroids.Add(newAsteroid);
+				m.asteroids.Add(new Asteroid((int)rnd.NextDouble() * ASTEROID_MAXDIST, (int)rnd.NextDouble() * 360, 8, 450, "Asteroid", "", m));
 			}
 			refreshTree();
 			
 		}
 
-		private void removePlanetToolStripMenuItem_Click(object sender, EventArgs e)
+		private void removePlanetToolStripMenuItem_Click(object sender, EventArgs e)												// Destroy Planet Menu
 		{
 			if (treeView1.SelectedNode.Tag is Planet tempPlanet)
 			{
@@ -732,15 +730,14 @@ namespace GalMapEdit
 			}
 		}
 
-		private void addStarToolStripMenuItem_Click(object sender, EventArgs e)
+		private void addStarToolStripMenuItem_Click(object sender, EventArgs e)														// New Star Menu
 		{
-			newStar = new Star("Star", "", 27, 27, 32, 4000000, selected);
-			selected.stars.Add(newStar);
-			refreshTree();
+			selected.stars.Add(new Star("Star", "", 27, 27, 32, 4000000, selected));
+			refreshTree(); 
 			statusPanel.Text = "Created New Star!";
 		}
 
-		private void addCometToolStripMenuItem_Click(object sender, EventArgs e)
+		private void addCometToolStripMenuItem_Click(object sender, EventArgs e)													// New Comet Menu
 		{
 			newComet = new Comet(0, 0, "Comet", "", 52, 120, selected);
 			selected.comets.Add(newComet);
@@ -748,7 +745,7 @@ namespace GalMapEdit
 			statusPanel.Text = "Created New Comet!";
 		}
 
-		private void addMoonToolStripMenuItem_Click(object sender, EventArgs e)
+		private void addMoonToolStripMenuItem_Click(object sender, EventArgs e)														// New Moon Menu
 		{
 			if (treeView1.SelectedNode.Tag is Planet tempPlanet)
 			{
@@ -759,7 +756,7 @@ namespace GalMapEdit
 			statusPanel.Text = "Created New Moon!";
 		}
 
-		private void removeStarToolStripMenuItem_Click(object sender, EventArgs e)
+		private void removeStarToolStripMenuItem_Click(object sender, EventArgs e)													// Destroy Star Menu
 		{
 			if (treeView1.SelectedNode.Tag is Star tempStar)
 			{
@@ -769,7 +766,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void removeCometToolStripMenuItem_Click(object sender, EventArgs e)
+		private void removeCometToolStripMenuItem_Click(object sender, EventArgs e)													// Destroy Coment Menu
 		{
 			if (treeView1.SelectedNode.Tag is Comet tempComet)
 			{
@@ -779,7 +776,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void blankToolStripMenuItem_Click(object sender, EventArgs e)
+		private void blankToolStripMenuItem_Click(object sender, EventArgs e)														// Create New Blank Galaxy Menu
 		{
 			// create new blank galaxy (just sectors)
 
@@ -806,10 +803,8 @@ namespace GalMapEdit
 			
 		}
 
-		private void randomToolStripMenuItem_Click(object sender, EventArgs e)
+		private void randomToolStripMenuItem_Click(object sender, EventArgs e)                                                      // Create New Random Galaxy Menu
 		{
-			// create new random galaxy (random everything)
-
 			//ask to save current galaxy y/n/cancel
 
 			DialogResult result;
@@ -830,9 +825,9 @@ namespace GalMapEdit
 		}
 
 
-		private void SpoolNewRandomGalaxy()
+		private void SpoolNewRandomGalaxy()																							// This actually spools the random galaxy
 		{
-			galaxy = new Sector[GALAXY_SIZE, GALAXY_SIZE];                                                                          // creates the map but doesn't populate it
+			galaxy = new Sector[GALAXY_SIZE, GALAXY_SIZE];
 
 			for (int y = 0; y < GALAXY_SIZE; y++)
 			{
@@ -884,6 +879,7 @@ namespace GalMapEdit
 				}
 			}
 		}
+
 		private void importFromFileToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			// create galaxy from image file <todo>
@@ -899,7 +895,7 @@ namespace GalMapEdit
 			// help -- about
 		}
 
-		private void saveCheck()
+		private void saveCheck()																									// makes sure the file has a name
 		{
 			if (filename != "" || filename != null)
 			{
@@ -912,21 +908,21 @@ namespace GalMapEdit
 			}
 		}
 
-		private void toolStripMenuItem3_Click(object sender, EventArgs e)
+		private void toolStripMenuItem3_Click(object sender, EventArgs e)															// save
 		{
 			// save
 			saveCheck();
 			
 		}
 
-		private void toolStripMenuItem2_Click(object sender, EventArgs e)
+		private void toolStripMenuItem2_Click(object sender, EventArgs e)															// save as
 		{
 			// Save as..
 			GetFilename();
 			Export();
 		}
 
-		private void GetFilename()
+		private void GetFilename()																									// opens the save dialog
 		{
 			SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 			saveFileDialog1.Filter = "Galaxy Map|*.galmap";
@@ -941,12 +937,12 @@ namespace GalMapEdit
 			}
 		}
 
-		private void Export()
+		private void Export()																										// doesn't really work well right now
 		{
 			WriteToBinaryFile(filename, galaxy, false);
 		}
 
-		private void removeMoonToolStripMenuItem_Click(object sender, EventArgs e)
+		private void removeMoonToolStripMenuItem_Click(object sender, EventArgs e)													// Destroy Moon Menu
 		{
 			if (treeView1.SelectedNode.Tag is Moon tempMoon)
 			{
@@ -956,7 +952,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void toolStripMenuItem4_Click(object sender, EventArgs e)
+		private void toolStripMenuItem4_Click(object sender, EventArgs e)															// Load Map Menu
 		{
 			// load galmap
 			
@@ -971,7 +967,7 @@ namespace GalMapEdit
 			treeView1.Refresh();
 		}
 
-		private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+		private void pictureBox1_MouseMove(object sender, MouseEventArgs e)															// updates the xy coords when the mouse moves
 		{
 			//textBox1.Text = String.Format("{0}", selectionX);
 			//textBox2.Text = String.Format("{0}", selectionY);
@@ -982,7 +978,7 @@ namespace GalMapEdit
 			ycoord = e.Y/GRIDSIZE;
 		}
 
-		public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
+		public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)								// this doesn't work well but here it is for posterity
 		{
 			using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
 			{
@@ -991,7 +987,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void nameEditBtn_Click(object sender, EventArgs e)
+		private void nameEditBtn_Click(object sender, EventArgs e)																	// Edit Name Menu
 		{
 			if (select is Asteroid a)
 			{
@@ -1019,7 +1015,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void typeEditBtn_Click(object sender, EventArgs e)
+		private void typeEditBtn_Click(object sender, EventArgs e)																	// Edit Type Menu
 		{
 			if (select is Asteroid a)
 			{
@@ -1047,7 +1043,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void massEditBtn_Click(object sender, EventArgs e)
+		private void massEditBtn_Click(object sender, EventArgs e)																	// Edit Mass Menu
 		{
 			if (select is Asteroid a)
 			{
@@ -1071,7 +1067,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void distEditBtn_Click(object sender, EventArgs e)
+		private void distEditBtn_Click(object sender, EventArgs e)																	// Edit Distance (or x) Menu
 		{
 			// x
 			if (select is Asteroid a)
@@ -1086,12 +1082,12 @@ namespace GalMapEdit
 
 			if (select is Planet p)
 			{
-				p.distance = showTextDialogInt("Change Planet Distance (or x)", p.distance);
+				p.x = showTextDialogInt("Change Planet Distance (or x)", p.x);
 			}
 
 			if (select is Moon m)
 			{
-				m.distance = showTextDialogInt("Change Moon Distance (or x)", m.distance);
+				m.x = showTextDialogInt("Change Moon Distance (or x)", m.x);
 			}
 			if (select is Star st)
 			{
@@ -1099,7 +1095,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void angEditBtn_Click(object sender, EventArgs e)
+		private void angEditBtn_Click(object sender, EventArgs e)																	// Edit Angle (or y) Menu
 		{
 			// y
 			if (select is Asteroid a)
@@ -1114,12 +1110,12 @@ namespace GalMapEdit
 
 			if (select is Planet p)
 			{
-				p.angle = showTextDialogInt("Change Planet Angle (or y)", p.angle);
+				p.y = showTextDialogInt("Change Planet Angle (or y)", p.y);
 			}
 
 			if (select is Moon m)
 			{
-				m.angle = showTextDialogInt("Change Moon Angle (or y)", m.angle);
+				m.y = showTextDialogInt("Change Moon Angle (or y)", m.y);
 			}
 
 			if (select is Star st)
@@ -1128,7 +1124,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private void descEditBtn_Click(object sender, EventArgs e)
+		private void descEditBtn_Click(object sender, EventArgs e)																	// Edit Description Menu
 		{
 			if (select is Asteroid a)
 			{
@@ -1156,7 +1152,7 @@ namespace GalMapEdit
 			}
 		}
 
-		private string showTextDialogStr(string label, string recall)
+		private string showTextDialogStr(string label, string recall)																// Helper method to parse text
 		{
 			TextDialog d = new TextDialog();
 			d.labelText.Text = label;
@@ -1174,7 +1170,7 @@ namespace GalMapEdit
 			}
 			
 		}
-		private int showTextDialogInt(string label, int recall)
+		private int showTextDialogInt(string label, int recall)																		// Helper method to parse integers
 		{
 			TextDialog d = new TextDialog();
 			d.labelText.Text = label;
@@ -1198,7 +1194,7 @@ namespace GalMapEdit
 			}
 		}
 
-		public static T ReadFromBinaryFile<T>(string filePath)
+		public static T ReadFromBinaryFile<T>(string filePath)																		// this has a memory leak somewhere so don't use it
 		{
 			using (Stream stream = File.Open(filePath, FileMode.Open))
 			{
@@ -1207,7 +1203,7 @@ namespace GalMapEdit
 			}
 		}
 
-		public static T ReadFromBinaryFile<T>(Stream strm)
+		public static T ReadFromBinaryFile<T>(Stream strm)																			// same deal as above
 		{
 			var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 			return (T)binaryFormatter.Deserialize(strm);
