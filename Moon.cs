@@ -7,64 +7,28 @@ using System.Threading.Tasks;
 namespace GalMapEdit
 {
 	[Serializable]
-	class Moon
+	class Moon : Thing
 	{
-		public string name;
-		public string desc;
-
-		public int distance;
-		public int angle;
-
-		public int mass;
-
-		public int type;
-
 		public List<Asteroid> asteroids;
-
-
-		private Planet host;
 
 		public Moon(string Name, string Desc, int dist, int ang, int Mass, int Type, Planet Host )
 		{
 			name = Name;
 			desc = Desc;
-			distance = dist;
-			angle = ang;
+			x = dist;
+			y = ang;
 			mass = Mass;
 			type = Type;
 			host = Host;
 			asteroids = new List<Asteroid>();
 		}
 
-		public string getName()
-		{
-			return name;
-		}
-
-		public string getDescription()
-		{
-			return desc;
-		}
-
-		public int getDistance()
-		{
-			return distance;
-		}
-
-		public int getAngle()
-		{
-			return angle;
-		}
-
-		public int getMass()
-		{
-			return mass;
-		}
-
 		public void Destroy()
 		{
-			host.moons.Remove(this);
+			if (host is Planet p)
+			{
+				p.moons.Remove(this);
+			}
 		}
-
 	}
 }

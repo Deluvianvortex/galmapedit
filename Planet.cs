@@ -7,19 +7,8 @@ using System.Threading.Tasks;
 namespace GalMapEdit
 {
 	[Serializable]
-	class Planet
+	class Planet : Thing
 	{
-		public string name;                     // planet name
-		public string desc;
-
-		public int distance;					// distance from host star
-		public int angle;                      // angle from host star
-		public int mass;
-
-		public int type;
-
-		private Star host;						// star in which this planet is in orbit around
-
 		public List<Moon> moons = new List<Moon>();
 		public List<Asteroid> asteroids = new List<Asteroid>();
 
@@ -27,46 +16,19 @@ namespace GalMapEdit
 		{
 			name = Name;
 			desc = Desc;
-			distance = dist;
-			angle = ang;
+			x = dist;
+			y = ang;
 			type = Type;
 			host = Host;
 			mass = Mass;
 		}
 
-		public string getName()
-		{
-			return name;
-		}
-
-		public string getDescription()
-		{
-			return desc;
-		}
-
-		public int getDistance()
-		{
-			return distance;
-		}
-
-		public int getAngle()
-		{
-			return angle;
-		}
-
-		public int getMass()
-		{
-			return mass;
-		}
-
-		public void setName(string n)
-		{
-			name = n;
-		}
-
 		public void Destroy()
 		{
-			host.planets.Remove(this);
+			if (host is Star s)
+			{
+				s.planets.Remove(this);
+			}
 		}
 	}
 }
