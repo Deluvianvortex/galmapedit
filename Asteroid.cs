@@ -7,14 +7,8 @@ using System.Threading.Tasks;
 namespace GalMapEdit
 {
 	[Serializable]
-	class Asteroid
+	class Asteroid : Thing
 	{
-		public int x, y;
-		public string name, desc;
-		public int type, mass;
-
-		public object host;
-
 		public Asteroid(int X, int Y, int t, int m, string n, string d, object h)
 		{
 			x = X;
