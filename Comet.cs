@@ -7,17 +7,8 @@ using System.Threading.Tasks;
 namespace GalMapEdit
 {
 	[Serializable]
-	class Comet
+	class Comet : Thing
 	{
-		public int x, y;
-
-		public string name;
-		public int type;
-		public int mass;
-		public string desc;
-
-		private Sector host;
-
 		public Comet(int X, int Y, string n, string d, int Type, int Mass, Sector Host)
 		{
 			x = X;
@@ -31,7 +22,10 @@ namespace GalMapEdit
 
 		public void Destroy()
 		{
-			host.comets.Remove(this);
+			if (host is Sector h)
+			h.comets.Remove(this);
 		}
+
+
 	}
 }
