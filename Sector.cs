@@ -45,5 +45,12 @@ namespace GalMapEdit
 			asteroids.Add(ast);
 		}
 
+		public byte[] Export()
+		{
+			byte[] data = new byte[0];
+			// lol this doesn't do anything right now
+			return data; 
+		}
+
 	}
 }

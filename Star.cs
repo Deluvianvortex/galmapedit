@@ -7,20 +7,10 @@ using System.Threading.Tasks;
 namespace GalMapEdit
 {
 	[Serializable]
-	class Star
+	class Star : Thing
 	{
-		public string name, desc;
-		public int x;
-		public int y;
-
-		public int mass;
-
-		public int type;
-
 		public List<Planet> planets = new List<Planet>();
 		public List<Asteroid> asteroids = new List<Asteroid>();
-
-		private Sector host;
 
 		public Star(string n, string d, int x1, int y1, int Type, int Mass, Sector Host)
 		{
@@ -44,7 +34,9 @@ namespace GalMapEdit
 
 		public void Destroy()
 		{
-			host.stars.Remove(this);
+			if (host is Sector s)
+
+			s.stars.Remove(this);
 		}
 	}
 }
